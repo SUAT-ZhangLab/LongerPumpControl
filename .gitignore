@@ -1,0 +1,14 @@
+/build/
+/release/
+/tmp/
+/drivers/
+*.pdf
+*.zip
+*.exe
+*.user
+*.suo
+.vs/
+.env
+.env.*
+*.log
+*.csv
