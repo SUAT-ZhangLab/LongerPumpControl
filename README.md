@@ -2,136 +2,95 @@
 
 # Longer Pump Control
 
-**A desktop workspace for two Longer LSP12-1B syringe pumps**
+**Windows control software for two Longer LSP12-1B syringe pumps**
 
-[Install](#install) · [Capabilities](#capabilities) · [Workflow](#workflow) · [Build](#build) · [Validation](#validation)
+[Install](#install--安装) · [Use](#use--使用) · [Build](#build--构建) · [Known limitations](#known-limitations--已知限制)
 
-[安装](#安装) · [功能](#功能) · [操作流程](#操作流程) · [构建](#构建) · [验证与限制](#验证与限制)
+[安装](#install--安装) · [使用](#use--使用) · [构建](#build--构建) · [已知限制](#known-limitations--已知限制)
 
 </div>
 
-Longer Pump Control brings two syringe pumps into one Windows workspace. Read device status, compare both pumps' parameters in one confirmation window, issue coordinated commands, and record measurements as CSV files. The main window carries the **Zhang Lab** heading; the application and installer retain the Longer Pump Control name.
+Longer Pump Control is a Windows application for operating two LSP12-1B syringe pumps through independent USB-RS485 connections. It displays pump status and parameters, supports individual and joint control, and records monitoring data as CSV files.
 
-**双注射器泵桌面工作台**
+Longer Pump Control 通过两条独立的 USB-RS485 连接控制两台 LSP12-1B 注射器泵，可查看设备状态与参数、执行单泵或双泵操作，并将监测数据保存为 CSV 文件。界面为中文。
 
-在同一窗口监测两台注射器泵，核对双方参数，执行联合启停并保存 CSV 记录。主界面顶部显示 **Zhang Lab**，应用与安装包保留 Longer Pump Control 名称。
+## Features / 功能
 
-Windows 10 / 11 x64 · C# / Windows Forms · .NET Framework 4.8 · Chinese interface / 中文界面
-
----
-
-## Install
-
-Download the installer or portable ZIP from [Releases](https://github.com/SUAT-ZhangLab/LongerPumpControl/releases). The installer creates desktop and Start menu shortcuts. For the portable version, keep the entire extracted folder, including `LongerPumpControl.exe.config`.
-
-The public package includes a driver detection assistant and a link to the [official FTDI driver page](https://ftdichip.com/drivers/). It does not redistribute the local DriverStore backup, vendor manual, or LabVIEW files. See [third-party materials](THIRD_PARTY.md).
-
-## 安装
-
-从 [Releases](https://github.com/SUAT-ZhangLab/LongerPumpControl/releases) 下载单文件安装包或便携 ZIP。安装包会创建桌面和开始菜单快捷方式；便携版请保留整个目录，尤其是 EXE 旁的 `.exe.config`。
-
-新电脑缺少驱动时，打开应用右下角“驱动与串口助手”，通过 [FTDI 官方页面](https://ftdichip.com/drivers/) 获取并安装驱动，然后重新检测串口。公开版不附带本地驱动备份、厂商 PDF 或 LabVIEW 文件，详见 [第三方说明](THIRD_PARTY.md)。运行应用不需要 Python 或 LabVIEW；首次下载驱动需要互联网。
-
----
-
-## Capabilities
-
-| Task | What the application provides |
+| Function | 功能 |
 | --- | --- |
-| Monitor two pumps | Device identity, status, faults, flow trends, and CSV records |
-| Operate together | Joint start, pause, resume, and stop; one parameter review for both pumps |
-| Connect on another computer | Distinct automatic COM selections and preservation of valid manual choices |
-| Use different displays | Automatic DPI/window scaling, manual zoom, and reduced refresh flicker |
-| Inspect settings | Parameter readback and an experimental parameter editor |
-| Try without hardware | Demo mode with simulated pumps |
+| Status, faults, flow, delivered volume, and flow trends | 状态、故障、流量、累计液量与趋势显示 |
+| Individual or joint start, pause, resume, and stop | 单泵或双泵启动、暂停、继续、停止 |
+| Both pumps' parameters in one confirmation window | 在同一窗口核对两台泵的参数 |
+| Distinct COM selection for each pump | 自动为两台泵选择不同串口 |
+| Automatic display scaling and manual zoom | 自动适配显示大小，支持手动缩放 |
+| Driver detection and FTDI download access | 驱动检测与 FTDI 官方下载入口 |
+| CSV logging and hardware-free demo mode | CSV 记录与无硬件模拟模式 |
 
-## 功能
+## Install / 安装
 
-| 任务 | 软件提供的功能 |
-| --- | --- |
-| 同时监测 | 显示两台身份、状态、故障、流量趋势，保存 CSV |
-| 联合控制 | 启动、暂停、继续、停止；同窗核对两台参数 |
-| 更换电脑 | 自动选择不同 COM 口，保留有效手动选择 |
-| 更换显示器 | 自动适配 DPI 与窗口大小、手动缩放、减少刷新闪烁 |
-| 查看设置 | 参数读取与实验性参数编辑 |
-| 无硬件体验 | 模拟双泵的 Demo 模式 |
+**Requirements:** Windows 10 / 11 x64 and .NET Framework 4.8. No Python or LabVIEW installation is needed.
 
----
+**系统要求：** Windows 10 / 11 x64、.NET Framework 4.8，无需安装 Python 或 LabVIEW。
 
-## Workflow
+Download from [Releases](https://github.com/SUAT-ZhangLab/LongerPumpControl/releases):
 
-1. Connect each pump through its own USB-RS485 adapter. Select Modbus RTU on the pump panel.
-2. Verify two different COM ports. Defaults: **115200 / 8N1 / address 1** on each independent port.
-3. Connect and check the reported LSP12-1B model, identity, and status. Connecting does not start motion.
-4. Review both pumps' parameters in the shared confirmation window before joint start or resume.
-5. Watch status and trends; export the session CSV when needed.
+- **Setup.exe** — installs the application and creates shortcuts. 安装软件并创建快捷方式。
+- **portable.zip** — extract and run `LongerPumpControl.exe`. 解压后运行，保留整个目录和 EXE 旁的 `.exe.config`。
+- **SHA256.txt** — checksums for the downloads. 下载文件校验值。
 
-## 操作流程
+If the adapter is not recognized, open the driver assistant and follow the [FTDI driver download](https://ftdichip.com/drivers/) instructions. Public packages do not include an offline driver backup or vendor manuals; see [THIRD_PARTY.md](THIRD_PARTY.md).
 
-1. 每台泵使用独立 USB-RS485 转接器，在泵面板选择 Modbus RTU。
-2. 核对两个不同 COM 口；默认均为 **115200 / 8N1 / 地址 1**。
-3. 连接后确认 LSP12-1B 型号、设备身份与状态。连接只读取信息，不会启动运动。
-4. 联合启动或继续前，在同一窗口核对两台参数。
-5. 观察状态和趋势，按需导出本次 CSV。
+若电脑未识别转接器，打开右下角“驱动与串口助手”，通过 FTDI 官网获取并安装对应驱动，再重新检测串口。公开安装包不含离线驱动备份或厂商原版说明书。
 
-The application does not automatically connect, start, or resume pumps. 当前支持两条独立串口、非组模式、通道 1；不会自动连接、启动或恢复运动。
+## Use / 使用
 
-[User guide / 使用说明](使用说明.txt) · [Protocol / 协议](docs/PROTOCOL.md)
+1. Connect each pump through a separate USB-RS485 adapter and select Modbus RTU on the pump panel. 每台泵使用独立转接器，泵面板选择 Modbus RTU。
+2. Check the two COM ports. Defaults are **115200 / 8N1 / address 1** for each independent connection. 核对两个不同的 COM 口及通信参数。
+3. Connect and check device identity, status, and parameters. 连接后核对设备身份、状态和参数；连接本身不会启动泵。
+4. Use the controls on each pump card, or review both pumps' parameters before a joint start or resume. 使用单泵按钮，或确认两台参数后执行联合启动、继续。
+5. Export the session CSV when needed. 按需导出本次 CSV 记录。
 
----
+Logs and connection settings are stored in `%LOCALAPPDATA%\LongerPumpControl`. The application does not automatically connect or start pumps.
 
-## Build
+日志与连接设置保存在上述目录。软件不会自动连接或自动启动泵。详细操作见 [使用说明](使用说明.txt)。
 
-Run in Windows PowerShell from the repository root:
+## Build / 构建
+
+Run from the repository root in Windows PowerShell. 在仓库根目录执行：
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\Build.ps1
 ```
 
-The script uses the Windows .NET Framework C# compiler, runs checks without hardware, and produces an installer and portable ZIP in `release/`. No NuGet, Python, or LabVIEW dependency is required.
+The script uses the .NET Framework C# compiler, runs automated checks without hardware, and writes the installer and portable ZIP to `release/`.
 
-## 构建
-
-在仓库根目录执行上面的 PowerShell 命令。脚本使用 Windows .NET Framework C# 编译器，运行不连接实物的检查，并在 `release/` 生成安装包和便携 ZIP。
+脚本使用 .NET Framework C# 编译器，执行不连接实物的自动检查，并将安装包和便携 ZIP 输出到 `release/`。
 
 ```powershell
-# Explore the GUI without connecting hardware / 无硬件体验
+# Demo mode / 模拟模式
 .\build\LongerPumpControl.exe --demo
 
-# GUI checks with simulated pumps / 模拟泵 GUI 检查
+# GUI checks with simulated pumps / 模拟泵界面检查
 .\build\LongerPumpControl.exe --demo --ui-test .\build\ui-tests
 ```
 
-| Location / 目录 | Contents / 内容 |
+| Directory | 内容 |
 | --- | --- |
-| `src/` | Application, protocol, GUI, driver assistant, installer / 应用与安装器源码 |
-| `tests/` | Automated checks and historical hardware probes / 自动检查与历史硬件探针 |
-| `docs/` | Protocol notes, test records, known limits / 协议、验收与限制 |
-| `Build.ps1` | Compile, test, package / 编译、测试、打包 |
-| `Install-Drivers.*` | Local offline migration support / 本地离线迁移脚本 |
+| `src/` | Application, protocol, GUI, and installer / 应用、通信协议、界面与安装器 |
+| `tests/` | Automated checks and hardware diagnostic tools / 自动检查与硬件诊断工具 |
+| `docs/` | Protocol notes and test records / 协议说明与测试记录 |
 
-`tests/*Probe.cs` includes tools that can move real pumps. They are not automatically executed by the build or application, and are not shipped in release packages. 部分 Probe 工具会控制实泵，请先阅读源码；它们不会在构建或应用启动时执行。
+Some `tests/*Probe.cs` tools send motion or setting commands to real pumps. They are not run by the build. 部分 Probe 工具会控制实泵或改写参数，使用前请阅读源码；构建脚本不会执行它们。
 
----
+## Known limitations / 已知限制
 
-## Validation
+- **Parameter writes are not hardware-validated.** The tested firmware 1.0.3.0 returns Modbus exception 3. **参数写入尚未通过实机验收**，样机固件 1.0.3.0 返回异常码 3。
+- Supported configuration: two independent serial ports, non-group mode, channel 1. 当前支持两条独立串口、非组模式、通道 1。
+- Joint commands are parallel serial operations, not hardware synchronization. 联合控制不保证硬件同步；软件停止不能替代设备物理停止操作。
+- Display scaling has been checked at multiple window sizes; cross-monitor DPI switching requires further hardware testing. 已检查多种窗口尺寸，跨显示器 DPI 切换仍需实机验证。
 
-Status and parameter reads, start, pause, resume, and stop were exercised on two LSP12-1B pumps. **Parameter writes are still rejected by the tested firmware 1.0.3.0 with Modbus exception 3; hardware acceptance of the settings feature is incomplete.**
+Readback, start, pause, resume, and stop have been tested on two LSP12-1B pumps. 读取及启停操作已在两台实泵上完成短时测试。
 
-Joint commands use parallel serial operations, not hardware synchronization. Software stop does not replace the physical stop control. Cross-monitor DPI switching still requires testing on the relevant hardware. This is an independently developed application, not official Longer software.
+[Protocol / 协议](docs/PROTOCOL.md) · [Hardware tests / 实机测试](docs/连接检测报告.md) · [Parameter writes / 参数写入](docs/参数写入排查记录.md) · [Display and COM / 显示与串口](docs/0.2.1显示与串口修复.md)
 
-## 验证与限制
-
-两台 LSP12-1B 已完成状态和参数读取、启动、暂停、继续、停止的短时实测。**参数写入仍被样机固件 1.0.3.0 拒绝（Modbus 异常码 3），设置功能尚未通过实机验收。**
-
-联合控制采用并行串口操作，不保证硬件同步；软件停止不能替代物理停止操作。真实跨显示器 DPI 切换仍需对应硬件验证。本项目不是兰格官方软件。
-
-[Display and COM checks / 显示与串口检查](docs/0.2.1显示与串口修复.md) · [Hardware report / 实机记录](docs/连接检测报告.md) · [Parameter-write investigation / 参数写入排查](docs/参数写入排查记录.md)
-
-Logs and settings / 日志和配置：`%LOCALAPPDATA%\LongerPumpControl`。Historical offline-driver notes describe the local migration package / 历史离线驱动验收记录针对本地迁移包。
-
-## License and third-party materials / 许可与第三方资料
-
-No open-source license has been selected for the project yet. Public availability does not grant redistribution rights to third-party materials. See [THIRD_PARTY.md](THIRD_PARTY.md).
-
-本项目目前未选择开源许可证；仓库公开不代表授予第三方资料的再分发权。
+This is independently developed software, not an official Longer product. No open-source license has been selected. 本项目为独立开发的软件，非兰格官方产品，目前未选择开源许可证。第三方资料说明见 [THIRD_PARTY.md](THIRD_PARTY.md)。
